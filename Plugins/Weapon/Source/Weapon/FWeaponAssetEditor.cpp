@@ -3,6 +3,7 @@
 #include "Weapons/CWeaponAsset.h"
 #include "SWeaponLeftArea.h"
 #include "SWeaponDetailsView.h"
+#include "SWeaponDoActionData.h"
 #include "SWeaponEquipmentData.h"
 
 const FName FWeaponAssetEditor::EditorName	  = "WeaponAssetEditor";
@@ -43,17 +44,30 @@ void FWeaponAssetEditor::Open(FString InAssetName)
 
 	FPropertyEditorModule& prop = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 
-	FDetailsViewArgs args(false, false, true, FDetailsViewArgs::ObjectsUseNameArea);
-	args.ViewIdentifier = "WeaponAssetEditorDetailsView";
-	DetailsView = prop.CreateDetailView(args);
+	//DetailsView
+	{
+		FDetailsViewArgs args(false, false, true, FDetailsViewArgs::ObjectsUseNameArea);
+		args.ViewIdentifier = "WeaponAssetEditorDetailsView";
+		DetailsView = prop.CreateDetailView(args);
 
-	FOnGetDetailCustomizationInstance detailsView;
-	detailsView.BindStatic(&SWeaponDetailsView::MakeInstance);
-	DetailsView->SetGenericLayoutDetailsDelegate(detailsView);
+		FOnGetDetailCustomizationInstance detailsView;
+		detailsView.BindStatic(&SWeaponDetailsView::MakeInstance);
+		DetailsView->SetGenericLayoutDetailsDelegate(detailsView);
+	}
 
-	FOnGetPropertyTypeCustomizationInstance equipmentData;
-	equipmentData.BindStatic(&SWeaponEquipmentData::MakeInstance);
-	prop.RegisterCustomPropertyTypeLayout("EquipmentData", equipmentData);
+	//EquipmentData
+	{
+		FOnGetPropertyTypeCustomizationInstance instance;
+		instance.BindStatic(&SWeaponEquipmentData::MakeInstance);
+		prop.RegisterCustomPropertyTypeLayout("EquipmentData", instance);
+	}
+
+	//DoActionData
+	{
+		FOnGetPropertyTypeCustomizationInstance instance;
+		instance.BindStatic(&SWeaponDoActionData::MakeInstance);
+		prop.RegisterCustomPropertyTypeLayout("DoActionData", instance);
+	}
 
 	TSharedRef<FTabManager::FLayout> Layout = FTabManager::NewLayout("WeaponAssetEditor_Layout")
 	->AddArea
@@ -116,6 +130,7 @@ bool FWeaponAssetEditor::OnRequestClose()
 		{
 			FPropertyEditorModule& prop = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 			prop.UnregisterCustomPropertyTypeLayout("EquipmentData");
+			prop.UnregisterCustomPropertyTypeLayout("DoActionData");
 		}
 	}
 

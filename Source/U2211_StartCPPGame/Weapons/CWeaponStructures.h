@@ -105,7 +105,7 @@ public:
 	FHitData* HitData;
 };
 
-/// À§ Struct µéÀ» Á÷·ÄÈ­ ÇÏ±â À§ÇØ¼­¸¸ UCLASS() °¡ Á¸ÀçÇÕ´Ï´Ù.
+/// ìœ„ Struct ë“¤ì„ ì§ë ¬í™” í•˜ê¸° ìœ„í•´ì„œë§Œ UCLASS() ê°€ ì¡´ì¬í•©ë‹ˆë‹¤.
 UCLASS()
 class U2211_STARTCPPGAME_API UCWeaponStructures : public UObject
 {

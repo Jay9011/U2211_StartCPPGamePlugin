@@ -9,10 +9,10 @@ public class U2211_StartCPPGame : ModuleRules
         PublicIncludePaths.Add(ModuleDirectory);
 
         PublicDependencyModuleNames.Add("Core");
+        PublicDependencyModuleNames.Add("Niagara");
 
         PrivateDependencyModuleNames.Add("CoreUObject");
         PrivateDependencyModuleNames.Add("Engine");
         PrivateDependencyModuleNames.Add("InputCore");
-        PrivateDependencyModuleNames.Add("Niagara");
 	}
 }
