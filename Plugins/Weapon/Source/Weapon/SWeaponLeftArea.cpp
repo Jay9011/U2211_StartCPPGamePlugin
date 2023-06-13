@@ -94,6 +94,27 @@ void SWeaponLeftArea::SelectDataPtr(UCWeaponAsset* InAsset)
 	}
 }
 
+FWeaponRowDataPtr SWeaponLeftArea::GetRowDataPtrByName(const FString& InAssetName)
+{
+	for (FWeaponRowDataPtr ptr : RowDatas)
+	{
+		if(ptr->Name == InAssetName)
+			return ptr;
+	}
+
+	return nullptr;
+}
+
+FString SWeaponLeftArea::SelectedRowDataPtrName()
+{
+	TArray<FWeaponRowDataPtr> ptrs = ListView->GetSelectedItems();
+
+	if(ptrs.Num() > 0)
+		return ptrs[0]->Asset->GetName();
+
+	return "";
+}
+
 TSharedRef<ITableRow> SWeaponLeftArea::OnGenerateRow(FWeaponRowDataPtr InRow, const TSharedRef<STableViewBase>& InTable)
 {
 	return SNew(SWeaponTableRow, InTable)

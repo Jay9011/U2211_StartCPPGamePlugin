@@ -47,7 +47,6 @@ typedef SListView<FWeaponRowDataPtr> SWeaponListView;
 /******************************************************
  *  SWeaponListView
  ******************************************************/
-
 DECLARE_DELEGATE_OneParam(FOnWeaponListViewSelectedItem, FWeaponRowDataPtr);
 
 class WEAPON_API SWeaponLeftArea
@@ -66,6 +65,9 @@ public:
 
 	bool HasRowPtrs() { return RowDatas.Num() > 0; }
 	void SelectDataPtr(class UCWeaponAsset* InAsset);
+
+	FWeaponRowDataPtr GetRowDataPtrByName(const FString& InAssetName);
+	FString SelectedRowDataPtrName();
 	
 private:
 	TSharedRef<ITableRow> OnGenerateRow(FWeaponRowDataPtr InRow, const TSharedRef<STableViewBase>& InTable);

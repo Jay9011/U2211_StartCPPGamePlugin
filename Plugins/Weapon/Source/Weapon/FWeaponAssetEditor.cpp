@@ -5,6 +5,7 @@
 #include "SWeaponDetailsView.h"
 #include "SWeaponDoActionData.h"
 #include "SWeaponEquipmentData.h"
+#include "SWeaponHitData.h"
 
 const FName FWeaponAssetEditor::EditorName	  = "WeaponAssetEditor";
 const FName FWeaponAssetEditor::LeftAreaTabId = "ListView";
@@ -16,6 +17,21 @@ void FWeaponAssetEditor::OpenWindow(FString InAssetName)
 {
 	if (Instance.IsValid())
 	{
+		if (Instance->LeftArea.IsValid())
+		{
+			FWeaponRowDataPtr ptr = nullptr;
+		
+			if(InAssetName.Len() > 0)
+				ptr = Instance->LeftArea->GetRowDataPtrByName(InAssetName);
+		
+			if(ptr.IsValid() == false)
+				ptr = Instance->LeftArea->GetFirstDataPtr();
+		
+			Instance->LeftArea->SelectDataPtr(ptr->Asset);
+		
+			return;
+		}
+		
 		Instance->CloseWindow();
 
 		Instance.Reset();
@@ -68,6 +84,13 @@ void FWeaponAssetEditor::Open(FString InAssetName)
 		instance.BindStatic(&SWeaponDoActionData::MakeInstance);
 		prop.RegisterCustomPropertyTypeLayout("DoActionData", instance);
 	}
+	
+	//HitData
+	{
+		FOnGetPropertyTypeCustomizationInstance instance;
+		instance.BindStatic(&SWeaponHitData::MakeInstance);
+		prop.RegisterCustomPropertyTypeLayout("HitData", instance);
+	}
 
 	TSharedRef<FTabManager::FLayout> Layout = FTabManager::NewLayout("WeaponAssetEditor_Layout")
 	->AddArea
@@ -107,11 +130,25 @@ void FWeaponAssetEditor::Open(FString InAssetName)
 	);
 
 	UCWeaponAsset* asset = nullptr;
-	asset = LeftArea->GetFirstDataPtr()->Asset;
+	if (InAssetName.Len() > 0)
+	{
+		FWeaponRowDataPtr ptr = LeftArea->GetRowDataPtrByName(InAssetName);
+
+		if(LeftArea->SelectedRowDataPtrName() == InAssetName)
+			return;
+
+		if(ptr.IsValid() == false)
+			asset = LeftArea->GetFirstDataPtr()->Asset;
+		else
+			asset = ptr->Asset;
+	}
+	else
+	{
+		asset = LeftArea->GetFirstDataPtr()->Asset;
+	}
 
 	// UCWeaponAsset* asset = NewObject<UCWeaponAsset>();
-	FAssetEditorToolkit::InitAssetEditor(EToolkitMode::Standalone, TSharedPtr<IToolkitHost>(), EditorName, Layout, true,
-										 true, asset);
+	FAssetEditorToolkit::InitAssetEditor(EToolkitMode::Standalone, TSharedPtr<IToolkitHost>(), EditorName, Layout, true, true, asset);
 
 	// DetailsView->SetObject(asset);
 	LeftArea->SelectDataPtr(asset);
@@ -131,6 +168,7 @@ bool FWeaponAssetEditor::OnRequestClose()
 			FPropertyEditorModule& prop = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 			prop.UnregisterCustomPropertyTypeLayout("EquipmentData");
 			prop.UnregisterCustomPropertyTypeLayout("DoActionData");
+			prop.UnregisterCustomPropertyTypeLayout("HitData");
 		}
 	}
 

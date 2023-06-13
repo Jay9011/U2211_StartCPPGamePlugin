@@ -48,4 +48,8 @@ private:
 
 	UPROPERTY()
 	class UCDoAction* DoAction;
+
+#if WITH_EDITOR
+	virtual void PostEditChangeChainProperty( struct FPropertyChangedChainEvent& PropertyChangedEvent ) override;
+#endif // WITH_EDITOR
 };
