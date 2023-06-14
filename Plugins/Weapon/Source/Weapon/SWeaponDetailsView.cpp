@@ -23,7 +23,7 @@ void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 {
 	UClass* type = UCWeaponAsset::StaticClass();
 
-	DetailBuilder.HideCategory("CWeaponAsset");
+	// DetailBuilder.HideCategory("CWeaponAsset");
 
 	//ClassSettings 카테고리 추가
 	{
@@ -31,6 +31,7 @@ void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 		category.AddProperty("AttachmentClass", type);
 		category.AddProperty("EquipmentClass", type);
 		category.AddProperty("DoActionClass", type);
+		category.AddProperty("SubActionClass", type);
 	}
 
 	//EquipmentData 카테고리 추가

@@ -7,6 +7,7 @@
 #include "Weapons/CAttachment.h"
 #include "Weapons/CEquipment.h"
 #include "Weapons/CDoAction.h"
+#include "Weapons/CSubAction.h"
 
 UCWeaponComponent::UCWeaponComponent()
 {
@@ -31,6 +32,8 @@ void UCWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if(!!GetSubAction())
+		GetSubAction()->Tick(DeltaTime);
 }
 
 bool UCWeaponComponent::IsIdleMode()
@@ -60,6 +63,14 @@ UCDoAction* UCWeaponComponent::GetDoAction()
 	CheckFalseResult(!!DataAssets[(int32)Type], nullptr);
 
 	return DataAssets[(int32)Type]->GetDoAction();
+}
+
+UCSubAction * UCWeaponComponent::GetSubAction()
+{
+	CheckTrueResult(IsUnarmedMode(), nullptr);
+	CheckFalseResult(!!DataAssets[(int32)Type], nullptr);
+
+	return DataAssets[(int32)Type]->GetSubAction();
 }
 
 void UCWeaponComponent::SetUnarmedMode()
@@ -147,4 +158,16 @@ void UCWeaponComponent::ChangeType(EWeaponType InType)
 
 	if (OnWeaponTypeChange.IsBound())
 		OnWeaponTypeChange.Broadcast(prevType, InType);
+}
+
+void UCWeaponComponent::SubAction_Pressed()
+{
+	if (!!GetSubAction())
+		GetSubAction()->Pressed();
+}
+
+void UCWeaponComponent::SubAction_Released()
+{
+	if (!!GetSubAction())
+		GetSubAction()->Released();
 }

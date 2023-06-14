@@ -3,6 +3,7 @@
 
 #include "CAttachment.h"
 #include "CDoAction.h"
+#include "CSubAction.h"
 #include "CEquipment.h"
 #include "GameFramework/Character.h"
 
@@ -10,7 +11,7 @@ UCWeaponAsset::UCWeaponAsset()
 {
 	AttachmentClass = ACAttachment::StaticClass();
 	EquipmentClass = UCEquipment::StaticClass();
-	DoActionClass = UCDoAction::StaticClass();
+	// DoActionClass = UCDoAction::StaticClass();
 }
 
 void UCWeaponAsset::BeginPlay(ACharacter* InOwner)
@@ -49,6 +50,12 @@ void UCWeaponAsset::BeginPlay(ACharacter* InOwner)
 			Attachment->OnAttachmentEndOverlap.AddDynamic(DoAction, &UCDoAction::OnAttachmentEndOverlap);
 		}
 	} //DoActionClass
+
+	if (!!SubActionClass)
+	{
+		SubAction = NewObject<UCSubAction>(this, SubActionClass);
+		SubAction->BeginPlay(InOwner, Attachment, DoAction);
+	} //SubActionClass
 }
 
 #if WITH_EDITOR

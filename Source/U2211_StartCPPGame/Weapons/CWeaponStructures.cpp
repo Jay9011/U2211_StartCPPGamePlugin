@@ -26,7 +26,7 @@ void FDoActionData::DoAction(ACharacter* InOwner)
 }
 
 /**
- * µ¥¹ÌÁö Àü´Ş
+ * ë°ë¯¸ì§€ ì „ë‹¬
  *
  * @param InAttacker 
  * @param InAttackCauser 
