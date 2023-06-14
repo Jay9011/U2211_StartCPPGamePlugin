@@ -58,7 +58,6 @@ public:
 	void SetAroundMode();
 	void SetBowMode();
 
-public:
 	void DoAction();
 
 	void SubAction_Pressed();

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
 #include "Weapons/CWeaponStructures.h"
 #include "CDoAction.generated.h"
 
