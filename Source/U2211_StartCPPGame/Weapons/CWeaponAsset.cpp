@@ -69,6 +69,7 @@ void UCWeaponAsset::PostEditChangeChainProperty(FPropertyChangedChainEvent& Prop
 
 	bool bRefresh = false;
 	bRefresh |= PropertyChangedEvent.GetPropertyName().Compare("DoActionDatas") == 0;
+	bRefresh |= PropertyChangedEvent.GetPropertyName().Compare("HitDatas") == 0;
 
 	if (bRefresh)
 	{
