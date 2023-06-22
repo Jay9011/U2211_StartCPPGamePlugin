@@ -24,7 +24,19 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Camera")
 	TSoftObjectPtr<class ACharacter> Target;
+
+	UPROPERTY(EditAnywhere, Category = "Modifier")
+	FVector LocationOffset = FVector(-400, 0, 90);
+
+	UPROPERTY(EditAnywhere, Category = "Modifier")
+	float PitchOffset = -15;
 	
 public:
 	FString GetNotifyName_Implementation() const override;
+	
+	virtual void NotifyBegin(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation, float TotalDuration) override;
+	virtual void NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation) override;
+
+private:
+	class UCCameraModifier* Modifier;
 };
