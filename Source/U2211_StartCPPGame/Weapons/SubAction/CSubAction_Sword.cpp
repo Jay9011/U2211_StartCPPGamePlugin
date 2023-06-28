@@ -57,9 +57,9 @@ void UCSubAction_Sword::Begin_SubAction_Implementation()
 		ACharacter* character = Cast<ACharacter>(HitResult.GetActor());
 		if(!!character)
 		{
-			//TODO: Add a check to see if the character is an enemy
 			character->GetCapsuleComponent()->SetCollisionProfileName("Sword_SubAction");
-			
+
+			Overlapped.Add(character);
 		}
 	}
 
