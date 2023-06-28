@@ -16,7 +16,7 @@ private:
 	float Distance = 1000;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Trace")
-	float Speed = 200;
+	float Speed = 20;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Trace")
 	TEnumAsByte<EDrawDebugTrace::Type> DrawDebug;
@@ -47,6 +47,9 @@ private:
 	
 	FVector Start;
 	FVector End;
+
+	TArray<class ACharacter*> Overlapped;
+	TArray<class ACharacter*> Hitted;
 
 private:
 	class ACGhostTrail* GhostTrail;

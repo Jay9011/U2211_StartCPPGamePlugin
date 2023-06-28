@@ -54,7 +54,13 @@ void UCSubAction_Sword::Begin_SubAction_Implementation()
 
 	for (const FHitResult& HitResult : hitResults)
 	{
-		CLog::Print(HitResult.GetActor()->GetName());
+		ACharacter* character = Cast<ACharacter>(HitResult.GetActor());
+		if(!!character)
+		{
+			//TODO: Add a check to see if the character is an enemy
+			character->GetCapsuleComponent()->SetCollisionProfileName("Sword_SubAction");
+			
+		}
 	}
 
 	FHitResult lineHitResult;
@@ -87,9 +93,15 @@ void UCSubAction_Sword::End_SubAction_Implementation()
 
 	Movement->Move();
 	Movement->DisableFixedCamera();
+
+	for (ACharacter* character : Overlapped)
+		character->GetCapsuleComponent()->SetCollisionProfileName("Pawn");
 	
 	if(!!GhostTrail)
 		GhostTrail->Destroy();
+
+	Overlapped.Empty();
+	Hitted.Empty();
 }
 
 void UCSubAction_Sword::Tick_Implementation(float InDeltaTime)
@@ -109,10 +121,18 @@ void UCSubAction_Sword::Tick_Implementation(float InDeltaTime)
 	}
 
 	FVector direction = (End - Start).GetSafeNormal2D();
-	Owner->AddActorWorldOffset(direction * Speed * InDeltaTime, true);
+	Owner->AddActorWorldOffset(direction * Speed, true);
 	
 }
 
-void UCSubAction_Sword::OnAttachmentBeginOverlap(ACharacter * InAttacker, AActor * InAttackCuaser, ACharacter * InOther)
+void UCSubAction_Sword::OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InAttackCuaser, ACharacter* InOther)
 {
+	CheckNull(InOther)
+
+	for (ACharacter* character : Hitted)
+		CheckTrue(character == InOther)
+
+	Hitted.AddUnique(InOther);
+	
+	HitData.SendDamage(Owner, InAttacker, InOther);
 }
