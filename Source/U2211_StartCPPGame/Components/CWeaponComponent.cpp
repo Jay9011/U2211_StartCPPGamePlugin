@@ -32,6 +32,9 @@ void UCWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if(!!GetDoAction())
+		GetDoAction()->Tick(DeltaTime);
+	
 	if(!!GetSubAction())
 		GetSubAction()->Tick(DeltaTime);
 }

@@ -21,6 +21,8 @@ public:
 		const TArray<FHitData>& InHitData
 	);
 
+	virtual void Tick(float InDeltaTime) {}
+	
 public:
 	virtual void DoAction();
 	virtual void Begin_DoAction();
