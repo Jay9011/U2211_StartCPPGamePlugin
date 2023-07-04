@@ -73,7 +73,7 @@ public:
 	float Launch = 100.f;
 
 	UPROPERTY(EditAnywhere)
-	float StopTime = 100.f;
+	float StopTime = 0.f;
 
 	UPROPERTY(EditAnywhere)
 	class USoundWave* Sound;
