@@ -26,7 +26,7 @@ void FDoActionData::DoAction(ACharacter* InOwner)
 }
 
 /**
- * 데미지 전달
+ * @brief 데미지 전달
  *
  * @param InAttacker 
  * @param InAttackCauser 
