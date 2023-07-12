@@ -1,6 +1,5 @@
 ﻿#include "SWeaponLeftArea.h"
 #include "Weapons/CWeaponAsset.h"
-
 #include "EngineUtils.h"
 #include "Widgets/Input/SSearchBox.h"
 
@@ -14,24 +13,24 @@ void SWeaponTableRow::Construct(const FArguments& InArgs, const TSharedRef<STabl
 	);
 }
 
-TSharedRef<SWidget> SWeaponTableRow::GenerateWidgetForColumn(const FName& InColumnName)
+TSharedRef<SWidget> SWeaponTableRow::GenerateWidgetForColumn(const FName & InColumnName)
 {
 	FString str;
-	if(InColumnName == "Number")
+	if (InColumnName == "Number")
 		str = FString::FromInt(Row->Number);
-	else if(InColumnName == "Name")
+	else if (InColumnName == "Name")
 		str = Row->Name;
 
 	return SNew(STextBlock)
 		.Text(FText::FromString(str));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 void SWeaponLeftArea::Construct(const FArguments& InArgs)
 {
 	OnWeaponListViewSelectedItem = InArgs._OnWeaponListViewSelectedItem;
-	
+
 	ChildSlot
 	[
 		SNew(SVerticalBox)
@@ -49,14 +48,14 @@ void SWeaponLeftArea::Construct(const FArguments& InArgs)
 		[
 			SAssignNew(ListView, SWeaponListView)
 			.HeaderRow
-             (
-                 SNew(SHeaderRow)
-                 + SHeaderRow::Column("Number")
-                 .DefaultLabel(FText::FromString(""))
-                 .ManualWidth(50)
-                 + SHeaderRow::Column("Name")
-                 .DefaultLabel(FText::FromString("Name"))
-             )
+			(
+				SNew(SHeaderRow)
+				+ SHeaderRow::Column("Number")
+				.DefaultLabel(FText::FromString(""))
+				.ManualWidth(50)
+				+ SHeaderRow::Column("Name")
+				.DefaultLabel(FText::FromString("Name"))
+			)
 			.ListItemsSource(&RowDatas)
 			.OnGenerateRow(this, &SWeaponLeftArea::OnGenerateRow)
 			.OnSelectionChanged(this, &SWeaponLeftArea::OnSelectionChanged)
@@ -78,14 +77,14 @@ void SWeaponLeftArea::Construct(const FArguments& InArgs)
 	ReadDataAssetList();
 }
 
-void SWeaponLeftArea::SelectDataPtr(UCWeaponAsset* InAsset)
+void SWeaponLeftArea::SelectDataPtr(UCWeaponAsset * InAsset)
 {
-	if(HasRowPtrs() == false)
+	if (HasRowPtrs() == false)
 		return;
 
 	for (FWeaponRowDataPtr ptr : RowDatas)
 	{
-		if(ptr->Asset == InAsset)
+		if (ptr->Asset == InAsset)
 		{
 			ListView->SetSelection(ptr);
 
@@ -94,11 +93,11 @@ void SWeaponLeftArea::SelectDataPtr(UCWeaponAsset* InAsset)
 	}
 }
 
-FWeaponRowDataPtr SWeaponLeftArea::GetRowDataPtrByName(const FString& InAssetName)
+FWeaponRowDataPtr SWeaponLeftArea::GetRowDataPtrByName(FString InAssetName)
 {
 	for (FWeaponRowDataPtr ptr : RowDatas)
 	{
-		if(ptr->Name == InAssetName)
+		if (ptr->Name == InAssetName)
 			return ptr;
 	}
 
@@ -109,7 +108,7 @@ FString SWeaponLeftArea::SelectedRowDataPtrName()
 {
 	TArray<FWeaponRowDataPtr> ptrs = ListView->GetSelectedItems();
 
-	if(ptrs.Num() > 0)
+	if (ptrs.Num() > 0)
 		return ptrs[0]->Asset->GetName();
 
 	return "";
@@ -118,7 +117,7 @@ FString SWeaponLeftArea::SelectedRowDataPtrName()
 TSharedRef<ITableRow> SWeaponLeftArea::OnGenerateRow(FWeaponRowDataPtr InRow, const TSharedRef<STableViewBase>& InTable)
 {
 	return SNew(SWeaponTableRow, InTable)
-	.Row(InRow);
+		.Row(InRow);
 }
 
 void SWeaponLeftArea::OnSelectionChanged(FWeaponRowDataPtr InPtr, ESelectInfo::Type InType)
@@ -129,7 +128,7 @@ void SWeaponLeftArea::OnSelectionChanged(FWeaponRowDataPtr InPtr, ESelectInfo::T
 	OnWeaponListViewSelectedItem.ExecuteIfBound(InPtr);
 }
 
-void SWeaponLeftArea::OnTextChanged(const FText& InText)
+void SWeaponLeftArea::OnTextChanged(const FText & InText)
 {
 	if (SearchText.CompareToCaseIgnored(InText) == 0)
 		return;
@@ -138,7 +137,7 @@ void SWeaponLeftArea::OnTextChanged(const FText& InText)
 	ReadDataAssetList();
 }
 
-void SWeaponLeftArea::OnTextCommitted(const FText& InText, ETextCommit::Type InType)
+void SWeaponLeftArea::OnTextCommitted(const FText & InText, ETextCommit::Type InType)
 {
 	OnTextChanged(InText);
 }
@@ -154,6 +153,7 @@ void SWeaponLeftArea::ReadDataAssetList()
 {
 	RowDatas.Empty();
 
+
 	TArray<UObject*> objects;
 	EngineUtils::FindOrLoadAssetsByPath("/Game/Weapons/", objects, EngineUtils::ATL_Regular);
 
@@ -161,12 +161,13 @@ void SWeaponLeftArea::ReadDataAssetList()
 	for (UObject* obj : objects)
 	{
 		UCWeaponAsset* asset = Cast<UCWeaponAsset>(obj);
-		if(asset == nullptr) continue;
+		if (asset == nullptr) continue;
+
 
 		FString name = asset->GetName();
-		if (SearchText.IsEmpty() == false)
+		if(SearchText.IsEmpty() == false)
 		{
-			if(name.Contains(SearchText.ToString()) == false)
+			if (name.Contains(SearchText.ToString()) == false)
 				continue;
 		}
 
@@ -179,5 +180,5 @@ void SWeaponLeftArea::ReadDataAssetList()
 	});
 
 	ListView->RequestListRefresh();
-	
 }
+

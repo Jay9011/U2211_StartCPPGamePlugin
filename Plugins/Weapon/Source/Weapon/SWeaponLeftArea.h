@@ -6,14 +6,19 @@
 
 struct FWeaponRowData
 {
-	int Number = 1;
+	int Number;
 	FString Name;
-	class UCWeaponAsset* Asset = nullptr;
-	
-	FWeaponRowData() {}
-	FWeaponRowData(int32 InNumber, FString InName, class UCWeaponAsset* InAsset)
-	  : Number(InNumber), Name(InName), Asset(InAsset)
+	class UCWeaponAsset* Asset;
+
+	FWeaponRowData()
 	{
+
+	}
+
+	FWeaponRowData(int32 InNumber, FString InName, class UCWeaponAsset* InAsset)
+		: Number(InNumber), Name(InName), Asset(InAsset)
+	{
+
 	}
 
 	static TSharedPtr<FWeaponRowData> Make(int32 InNumber, FString InName, class UCWeaponAsset* InAsset)
@@ -23,9 +28,8 @@ struct FWeaponRowData
 };
 typedef TSharedPtr<FWeaponRowData> FWeaponRowDataPtr;
 
-/******************************************************
- * SWeaponTableRow
- ******************************************************/
+///////////////////////////////////////////////////////////////////////////////
+
 class WEAPON_API SWeaponTableRow
 	: public SMultiColumnTableRow<FWeaponRowDataPtr>
 {
@@ -44,9 +48,8 @@ private:
 };
 typedef SListView<FWeaponRowDataPtr> SWeaponListView;
 
-/******************************************************
- *  SWeaponListView
- ******************************************************/
+///////////////////////////////////////////////////////////////////////////////
+
 DECLARE_DELEGATE_OneParam(FOnWeaponListViewSelectedItem, FWeaponRowDataPtr);
 
 class WEAPON_API SWeaponLeftArea
@@ -66,16 +69,16 @@ public:
 	bool HasRowPtrs() { return RowDatas.Num() > 0; }
 	void SelectDataPtr(class UCWeaponAsset* InAsset);
 
-	FWeaponRowDataPtr GetRowDataPtrByName(const FString& InAssetName);
+	FWeaponRowDataPtr GetRowDataPtrByName(FString InAssetName);
 	FString SelectedRowDataPtrName();
-	
+
 private:
 	TSharedRef<ITableRow> OnGenerateRow(FWeaponRowDataPtr InRow, const TSharedRef<STableViewBase>& InTable);
 	void OnSelectionChanged(FWeaponRowDataPtr InPtr, ESelectInfo::Type InType);
 
 	void OnTextChanged(const FText& InText);
 	void OnTextCommitted(const FText& InText, ETextCommit::Type InType);
-	
+
 private:
 	FText OnGetAssetCount() const;
 
@@ -84,7 +87,7 @@ private:
 
 private:
 	FOnWeaponListViewSelectedItem OnWeaponListViewSelectedItem;
-	
+
 private:
 	TArray<FWeaponRowDataPtr> RowDatas;
 	TSharedPtr<SWeaponListView> ListView;

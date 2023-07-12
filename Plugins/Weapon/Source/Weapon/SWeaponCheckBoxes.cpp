@@ -1,8 +1,6 @@
 #include "SWeaponCheckBoxes.h"
-
 #include "WeaponStyle.h"
 #include "SWeaponDetailsView.h"
-
 #include "Widgets/Layout/SUniformGridPanel.h"
 #include "IPropertyUtilities.h"
 #include "IDetailPropertyRow.h"
@@ -15,21 +13,14 @@ void SWeaponCheckBoxes::AddProperties(TSharedPtr<IPropertyHandle> InHandle)
 	InHandle->GetNumChildren(number);
 
 	for (uint32 i = 0; i < number; i++)
-	{
 		InternalDatas.Add(FInternalData(InHandle->GetChildHandle(i)));
-	}
 }
 
-void SWeaponCheckBoxes::SetUtilities(TSharedPtr<IPropertyUtilities> InUtilities)
+void SWeaponCheckBoxes::SetUtilities(TSharedPtr<class IPropertyUtilities> InUtilities)
 {
 	Utilities = InUtilities;
 }
 
-/**
- * @brief 
- * @param bBackground value 영역에 배경을 그릴지 여부
- * @return 
- */
 TSharedRef<SWidget> SWeaponCheckBoxes::Draw(bool bBackground)
 {
 	TSharedPtr<SUniformGridPanel> panel;
@@ -42,12 +33,12 @@ TSharedRef<SWidget> SWeaponCheckBoxes::Draw(bool bBackground)
 		[
 			DrawCheckBox(i)
 		];
-	}
+	};
 
 	if(bBackground == false)
 		return panel.ToSharedRef();
 
-	// 만약 bBackground가 true라면, SBordered를 추가하여 panel을 감싸준다.
+
 	TSharedPtr<SBorder> border = SNew(SBorder)
 	.BorderImage(FWeaponStyle::Get()->Array_Image.Get())
 	[
@@ -69,7 +60,7 @@ bool SWeaponCheckBoxes::CanDraw(TSharedPtr<IPropertyHandle> InHandle, int InCoun
 	return bCheck;
 }
 
-void SWeaponCheckBoxes::CheckDefaultObject(int32 InIndex, UObject* InValue)
+void SWeaponCheckBoxes::CheckDefaultObject(int32 InIndex, UObject * InValue)
 {
 	UObject* val = nullptr;
 	InternalDatas[InIndex].Handle->GetValue(val);
@@ -96,7 +87,7 @@ void SWeaponCheckBoxes::CheckDefaultValue(int32 InIndex, bool InValue)
 		InternalDatas[InIndex].bChecked = true;
 }
 
-void SWeaponCheckBoxes::CheckDefaultValue(int32 InIndex, const FVector& InValue)
+void SWeaponCheckBoxes::CheckDefaultValue(int32 InIndex, const FVector & InValue)
 {
 	FVector val = FVector::ZeroVector;
 	InternalDatas[InIndex].Handle->GetValue(val);
@@ -127,15 +118,15 @@ void SWeaponCheckBoxes::OnCheckStateChanged(ECheckBoxState InState, int32 InInde
 	SWeaponDetailsView::OffRefreshByCheckBoxes();
 }
 
-void SWeaponCheckBoxes::DrawProperties(TSharedRef<IPropertyHandle> InPropertyHandle, IDetailChildrenBuilder& InChildrenBuilder)
+void SWeaponCheckBoxes::DrawProperties(TSharedRef<IPropertyHandle> InPropertyHandle, IDetailChildrenBuilder * InChilrenBuilder)
 {
 	for (int32 i = 0; i < InternalDatas.Num(); i++)
 	{
-		if(InternalDatas[i].bChecked == false)
+		if (InternalDatas[i].bChecked == false)
 			continue;
-		
+
 		TSharedPtr<IPropertyHandle> handle = InPropertyHandle->GetChildHandle(i);
-		IDetailPropertyRow& row = InChildrenBuilder.AddProperty(handle.ToSharedRef());
+		IDetailPropertyRow& row = InChilrenBuilder->AddProperty(handle.ToSharedRef());
 
 		TSharedPtr<SWidget> name;
 		TSharedPtr<SWidget> value;
@@ -143,10 +134,10 @@ void SWeaponCheckBoxes::DrawProperties(TSharedRef<IPropertyHandle> InPropertyHan
 		row.GetDefaultWidgets(name, value);
 
 		row.CustomWidget()
-		.NameContent()
-		[
-			name.ToSharedRef()
-		]
+			.NameContent()
+			[
+				name.ToSharedRef()
+			]
 		.ValueContent()
 		.MinDesiredWidth(FWeaponStyle::Get()->DesiredWidth.X)
 		.MaxDesiredWidth(FWeaponStyle::Get()->DesiredWidth.Y)

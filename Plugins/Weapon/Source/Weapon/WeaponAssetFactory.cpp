@@ -1,5 +1,4 @@
 #include "WeaponAssetFactory.h"
-
 #include "Weapons/CWeaponAsset.h"
 
 UWeaponAssetFactory::UWeaponAssetFactory()
@@ -9,9 +8,7 @@ UWeaponAssetFactory::UWeaponAssetFactory()
 	SupportedClass = UCWeaponAsset::StaticClass();
 }
 
-UObject* UWeaponAssetFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
-	UObject* Context, FFeedbackContext* Warn, FName CallingContext)
+UObject * UWeaponAssetFactory::FactoryCreateNew(UClass * InClass, UObject * InParent, FName InName, EObjectFlags Flags, UObject * Context, FFeedbackContext * Warn, FName CallingContext)
 {
-
 	return NewObject<UCWeaponAsset>(InParent, InClass, InName, Flags);
 }

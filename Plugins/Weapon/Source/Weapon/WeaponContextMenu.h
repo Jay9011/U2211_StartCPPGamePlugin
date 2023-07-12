@@ -9,7 +9,7 @@ class WEAPON_API FWeaponContextMenu
 {
 public:
 	FWeaponContextMenu(EAssetTypeCategories::Type InCategory);
-	void OpenAssetEditor( const TArray<UObject*>& InObjects, TSharedPtr<class IToolkitHost> EditWithinLevelEditor = TSharedPtr<IToolkitHost>() ) override;
+	void OpenAssetEditor(const TArray<UObject*>& InObjects, TSharedPtr<class IToolkitHost> EditWithinLevelEditor = TSharedPtr<IToolkitHost>()) override;
 
 public:
 	virtual FText GetName() const override;

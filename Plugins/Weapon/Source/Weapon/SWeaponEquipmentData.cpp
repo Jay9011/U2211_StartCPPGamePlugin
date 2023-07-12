@@ -1,19 +1,18 @@
 #include "SWeaponEquipmentData.h"
-
 #include "SWeaponCheckBoxes.h"
-#include "DetailWidgetRow.h"
-#include "IDetailChildrenBuilder.h"
-#include "IDetailPropertyRow.h"
 #include "IPropertyUtilities.h"
+#include "IDetailPropertyRow.h"
+#include "IDetailChildrenBuilder.h"
+#include "DetailWidgetRow.h"
 
-TSharedPtr<class SWeaponCheckBoxes> SWeaponEquipmentData::CheckBoxes;
+TSharedPtr<SWeaponCheckBoxes> SWeaponEquipmentData::CheckBoxes;
 
 TSharedRef<IPropertyTypeCustomization> SWeaponEquipmentData::MakeInstance()
 {
 	return MakeShareable(new SWeaponEquipmentData());
 }
 
-TSharedPtr<SWeaponCheckBoxes> SWeaponEquipmentData::CreateCheckBoxes()
+TSharedPtr<class SWeaponCheckBoxes> SWeaponEquipmentData::CreateCheckBoxes()
 {
 	if (CheckBoxes.IsValid())
 	{
@@ -68,6 +67,6 @@ void SWeaponEquipmentData::CustomizeChildren(TSharedRef<IPropertyHandle> InPrope
 			value.ToSharedRef()
 		];
 	}*/
-	
-	CheckBoxes->DrawProperties(InPropertyHandle, InChildBuilder);
+
+	CheckBoxes->DrawProperties(InPropertyHandle, &InChildBuilder);
 }

@@ -1,11 +1,10 @@
 #include "SWeaponHitData.h"
-
 #include "WeaponStyle.h"
 #include "SWeaponCheckBoxes.h"
-#include "DetailWidgetRow.h"
-#include "IDetailChildrenBuilder.h"
+#include "IPropertyUtilities.h"
 #include "IDetailPropertyRow.h"
-
+#include "IDetailChildrenBuilder.h"
+#include "DetailWidgetRow.h"
 
 TArray<TSharedPtr<class SWeaponCheckBoxes>> SWeaponHitData::CheckBoxes;
 
@@ -14,9 +13,9 @@ TSharedRef<IPropertyTypeCustomization> SWeaponHitData::MakeInstance()
 	return MakeShareable(new SWeaponHitData());
 }
 
-TSharedPtr<SWeaponCheckBoxes> SWeaponHitData::AddCheckBoxes()
+TSharedPtr<class SWeaponCheckBoxes> SWeaponHitData::AddCheckBoxes()
 {
-	TSharedPtr<SWeaponCheckBoxes> checkBoxes = MakeShareable(new SWeaponCheckBoxes);
+	TSharedPtr<SWeaponCheckBoxes> checkBoxes = MakeShareable(new SWeaponCheckBoxes());
 	int32 index = CheckBoxes.Add(checkBoxes);
 
 	return CheckBoxes[index];
@@ -26,14 +25,14 @@ void SWeaponHitData::EmptyCheckBoxes()
 {
 	for (TSharedPtr<SWeaponCheckBoxes> ptr : CheckBoxes)
 	{
-		if(ptr.IsValid())
+		if (ptr.IsValid())
 			ptr.Reset();
 	}
 
 	CheckBoxes.Empty();
 }
 
-void SWeaponHitData::CustomizeHeader(TSharedRef<IPropertyHandle> InPropertyHandle, FDetailWidgetRow& InHeaderRow, IPropertyTypeCustomizationUtils& InCustomizationUtils)
+void SWeaponHitData::CustomizeHeader(TSharedRef<IPropertyHandle> InPropertyHandle, FDetailWidgetRow & InHeaderRow, IPropertyTypeCustomizationUtils & InCustomizationUtils)
 {
 	if (SWeaponCheckBoxes::CanDraw(InPropertyHandle, CheckBoxes.Num()) == false)
 	{
@@ -42,43 +41,44 @@ void SWeaponHitData::CustomizeHeader(TSharedRef<IPropertyHandle> InPropertyHandl
 			[
 				InPropertyHandle->CreatePropertyNameWidget()
 			]
-			.ValueContent()
+		.ValueContent()
 			.MinDesiredWidth(FWeaponStyle::Get()->DesiredWidth.X)
 			.MaxDesiredWidth(FWeaponStyle::Get()->DesiredWidth.Y)
 			[
 				InPropertyHandle->CreatePropertyValueWidget()
 			];
-		
+
 		return;
 	}
 
-	
+
 	int32 index = InPropertyHandle->GetIndexInArray();
 	CheckBoxes[index]->SetUtilities(InCustomizationUtils.GetPropertyUtilities());
 
+
 	FString name = InPropertyHandle->GetPropertyDisplayName().ToString();
 	name = "Hit Data - " + name;
-	
+
 	InHeaderRow
-	.NameContent()
-	[
-		SNew(SBorder)
-		.BorderImage(FWeaponStyle::Get()->Array_Image.Get())
+		.NameContent()
 		[
-			InPropertyHandle->CreatePropertyNameWidget(FText::FromString(name))				
+			SNew(SBorder)
+			.BorderImage(FWeaponStyle::Get()->Array_Image.Get())
+		[
+			InPropertyHandle->CreatePropertyNameWidget(FText::FromString(name))
 		]
-	]
+		]
 	.ValueContent()
-	.MinDesiredWidth(FWeaponStyle::Get()->DesiredWidth.X)
-	.MaxDesiredWidth(FWeaponStyle::Get()->DesiredWidth.Y)
-	[
-		CheckBoxes[index]->Draw(true)
-	];
+		.MinDesiredWidth(FWeaponStyle::Get()->DesiredWidth.X)
+		.MaxDesiredWidth(FWeaponStyle::Get()->DesiredWidth.Y)
+		[
+			CheckBoxes[index]->Draw(true)
+		];
 }
 
-void SWeaponHitData::CustomizeChildren(TSharedRef<IPropertyHandle> InPropertyHandle, IDetailChildrenBuilder& InChildBuilder, IPropertyTypeCustomizationUtils& InCustomizationUtils)
+void SWeaponHitData::CustomizeChildren(TSharedRef<IPropertyHandle> InPropertyHandle, IDetailChildrenBuilder & InChildBuilder, IPropertyTypeCustomizationUtils & InustomizationUtils)
 {
-	if(SWeaponCheckBoxes::CanDraw(InPropertyHandle, CheckBoxes.Num()) == false)
+	if (SWeaponCheckBoxes::CanDraw(InPropertyHandle, CheckBoxes.Num()) == false)
 	{
 		uint32 number = 0;
 		InPropertyHandle->GetNumChildren(number);
@@ -94,21 +94,21 @@ void SWeaponHitData::CustomizeChildren(TSharedRef<IPropertyHandle> InPropertyHan
 			row.GetDefaultWidgets(name, value);
 
 			row.CustomWidget()
-			   .NameContent()
+				.NameContent()
 				[
 					name.ToSharedRef()
 				]
-				.ValueContent()
+			.ValueContent()
 				.MinDesiredWidth(FWeaponStyle::Get()->DesiredWidth.X)
 				.MaxDesiredWidth(FWeaponStyle::Get()->DesiredWidth.Y)
 				[
 					value.ToSharedRef()
 				];
-		} //for(i)
+		}//for(i)
+
 		return;
 	}
-	
-	
+
 	int32 index = InPropertyHandle->GetIndexInArray();
-	CheckBoxes[index]->DrawProperties(InPropertyHandle, InChildBuilder);
+	CheckBoxes[index]->DrawProperties(InPropertyHandle, &InChildBuilder);
 }

@@ -1,7 +1,7 @@
 #include "WeaponModule.h"
 #include "WeaponStyle.h"
 #include "WeaponContextMenu.h"
-#include "FWeaponCommand.h"
+#include "WeaponCommand.h"
 
 #include "IAssetTools.h"
 #include "AssetToolsModule.h"
@@ -14,30 +14,27 @@ void FWeaponModule::StartupModule()
 {
 	FWeaponStyle::Get();
 
-	IAssetTools& assetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
-	EAssetTypeCategories::Type type = assetTools.RegisterAdvancedAssetCategory("WeaponAsset", FText::FromString("Weapons"));
 
-	ContextMenu = MakeShareable<FWeaponContextMenu>(new FWeaponContextMenu(type));
+	IAssetTools& assetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
+	EAssetTypeCategories::Type type = assetTools.RegisterAdvancedAssetCategory("WeaponAsset", FText::FromString("Weapon"));
+
+	ContextMenu = MakeShareable(new FWeaponContextMenu(type));
 	assetTools.RegisterAssetTypeActions(ContextMenu.ToSharedRef());
 
-	Command = MakeShareable<FWeaponCommand>(new FWeaponCommand());
+
+	Command = MakeShareable(new FWeaponCommand());
 	Command->Startup();
 }
 
 void FWeaponModule::ShutdownModule()
 {
 	if (ContextMenu.IsValid())
-	{
 		ContextMenu.Reset();
-	}
 
 	if (Command.IsValid())
-	{
 		Command.Reset();
-	}
-
+	
 	FWeaponStyle::Shutdown();
 }
 
 #undef LOCTEXT_NAMESPACE
-	

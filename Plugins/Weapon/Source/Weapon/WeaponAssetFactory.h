@@ -8,7 +8,7 @@ UCLASS()
 class WEAPON_API UWeaponAssetFactory : public UFactory
 {
 	GENERATED_BODY()
-
+	
 public:
 	UWeaponAssetFactory();
 
