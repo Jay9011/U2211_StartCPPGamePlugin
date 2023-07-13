@@ -24,10 +24,26 @@ public:
 	void DoAction() override;
 	void Begin_DoAction() override;
 	void End_DoAction() override;
+	
+	void OnBeginEquip() override;
+	void OnUnequip() override;
 
 	void Tick(float InDeltaTime) override;
 
+public:
+	void End_BowString();
+
 private:
-	bool* bAttachedString;
+	class UPoseableMeshComponent* PoseableMesh;
+	class USkeletalMeshComponent* SkeletalMesh;
+
+private:
+	bool bAttachedString = true;
+	FVector OriginLocation;
+
+private:
 	float* Bend;
+
+private:
+	const bool* bEquipped;
 };

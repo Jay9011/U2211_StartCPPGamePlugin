@@ -29,8 +29,6 @@ void ACAttachment_Bow::BeginPlay()
 
 	SkeletalMesh->SetVisibility(false);
 
-	OriginStringLocation = PoseableMesh->GetBoneLocation("bow_string_mid", EBoneSpaces::ComponentSpace);
-
 	PoseableMesh->SetSkeletalMesh(SkeletalMesh->SkeletalMesh);
 	PoseableMesh->CopyPoseFromSkeletalComponent(SkeletalMesh);
 }
@@ -39,18 +37,7 @@ void ACAttachment_Bow::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	PoseableMesh->CopyPoseFromSkeletalComponent(SkeletalMesh);
-
-	if (bAttachedString)
-	{
-		FVector handLocation = OwnerCharacter->GetMesh()->GetSocketLocation("Hand_Bow_Right");
-		PoseableMesh->SetBoneLocationByName("bow_string_mid", handLocation, EBoneSpaces::WorldSpace);
-	}
-}
-
-float* ACAttachment_Bow::GetBend()
-{
-	return Cast<UCAnimInstance_Bow>(SkeletalMesh->GetAnimInstance())->GetBend();
+	// PoseableMesh->CopyPoseFromSkeletalComponent(SkeletalMesh);
 }
 
 void ACAttachment_Bow::OnBeginEquip_Implementation()
@@ -71,19 +58,10 @@ void ACAttachment_Bow::OnBeginEquip_Implementation()
 	}
 }
 
-void ACAttachment_Bow::OnEndEquip_Implementation()
-{
-	Super::OnEndEquip_Implementation();
-
-	bAttachedString = true;
-}
-
 void ACAttachment_Bow::OnUnequip_Implementation()
 {
 	Super::OnUnequip_Implementation();
 
-	bAttachedString = false;
-	
 	AttachTo("Holster_Bow");
 
 	APlayerController* controller = OwnerCharacter->GetController<APlayerController>();
@@ -92,4 +70,9 @@ void ACAttachment_Bow::OnUnequip_Implementation()
 		controller->PlayerCameraManager->ViewPitchMin = OriginViewPitchRange.X;
 		controller->PlayerCameraManager->ViewPitchMax = OriginViewPitchRange.Y;
 	}
+}
+
+float* ACAttachment_Bow::GetBend()
+{
+	return Cast<UCAnimInstance_Bow>(SkeletalMesh->GetAnimInstance())->GetBend();
 }

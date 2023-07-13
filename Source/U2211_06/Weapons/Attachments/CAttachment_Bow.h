@@ -19,9 +19,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 		class UPoseableMeshComponent* PoseableMesh;
-
-public:
-	FORCEINLINE bool* GetAttachedString() { return &bAttachedString; }
 	
 public:
 	ACAttachment_Bow();
@@ -32,17 +29,18 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-public:
-	float* GetBend();
-
 	
 public:
 	void OnBeginEquip_Implementation() override;
-	void OnEndEquip_Implementation() override;
 	void OnUnequip_Implementation() override;
 
 private:
 	FVector2D OriginViewPitchRange;
-	FVector OriginStringLocation;
-	bool bAttachedString;
+
+/*
+ * Getter
+ */	
+public:
+	float* GetBend();
+
 };
