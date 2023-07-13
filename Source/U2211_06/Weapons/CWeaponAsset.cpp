@@ -31,6 +31,7 @@ void UCWeaponAsset::BeginPlay(ACharacter * InOwner)
 		if (!!Attachment)
 		{
 			Equipment->OnEquipmentBeginEquip.AddDynamic(Attachment, &ACAttachment::OnBeginEquip);
+			Equipment->OnEquipmentEndEquip.AddDynamic(Attachment, &ACAttachment::OnEndEquip);
 			Equipment->OnEquipmentUnequip.AddDynamic(Attachment, &ACAttachment::OnUnequip);
 		}
 	}

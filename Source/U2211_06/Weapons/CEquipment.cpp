@@ -49,6 +49,9 @@ void UCEquipment::End_Equip_Implementation()
 
 	Movement->Move();
 	State->SetIdleMode();
+
+	if(OnEquipmentEndEquip.IsBound())
+		OnEquipmentEndEquip.Broadcast();
 }
 
 void UCEquipment::Unequip_Implementation()

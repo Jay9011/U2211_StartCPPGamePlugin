@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
 #include "Weapons/AddOns/CGhostTrail.h"
+#include "Kismet/GameplayStatics.h"
 
 #define CheckTrue(x) { if(x == true) return; }
 #define CheckTrueResult(x, y) { if(x == true) return y; }

@@ -65,4 +65,7 @@ private:
 
 private:
 	FTimeline Timeline;
+
+private:
+	float* Bend;
 };

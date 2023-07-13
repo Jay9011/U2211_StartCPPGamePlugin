@@ -6,6 +6,7 @@
 #include "CEquipment.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEquipmentBeginEquip);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEquipmentEndEquip);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEquipmentUnequip);
 
 UCLASS()
@@ -35,6 +36,7 @@ public:
 
 public:
 	FEquipmentBeginEquip OnEquipmentBeginEquip;
+	FEquipmentEndEquip OnEquipmentEndEquip;
 	FEquipmentUnequip OnEquipmentUnequip;
 
 private:

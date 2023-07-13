@@ -31,6 +31,10 @@ public:
 	virtual void OnBeginEquip_Implementation() {}
 
 	UFUNCTION(BlueprintNativeEvent)
+		void OnEndEquip();
+	virtual void OnEndEquip_Implementation() {}
+
+	UFUNCTION(BlueprintNativeEvent)
 		void OnUnequip();
 	virtual void OnUnequip_Implementation() {}
 
