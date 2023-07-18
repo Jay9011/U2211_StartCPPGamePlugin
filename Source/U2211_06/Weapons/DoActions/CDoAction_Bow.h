@@ -4,11 +4,15 @@
 #include "Weapons/CDoAction.h"
 #include "CDoAction_Bow.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class U2211_06_API UCDoAction_Bow : public UCDoAction
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Arrow")
+	TSubclassOf<class ACArrow> ArrowClass;
+	
 public:
 	UCDoAction_Bow();
 
@@ -34,6 +38,17 @@ public:
 	void End_BowString();
 
 private:
+	void CreateArrow();
+	class ACArrow* GetAttachedArrow();
+
+private:
+	UFUNCTION()
+	void OnArrowHit(class AActor* InCauser, class ACharacter* InOtherCharacter);
+
+	UFUNCTION()
+	void OnArrowEndPlay(class ACArrow* InDestroyer);
+
+private:
 	class UPoseableMeshComponent* PoseableMesh;
 	class USkeletalMeshComponent* SkeletalMesh;
 
@@ -46,4 +61,7 @@ private:
 
 private:
 	const bool* bEquipped;
+
+private:
+	TArray<class ACArrow*> Arrows;
 };
