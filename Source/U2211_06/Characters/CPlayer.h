@@ -4,8 +4,12 @@
 #include "ICharacter.h"
 #include "GameFramework/Character.h"
 #include "Components/CStateComponent.h"
+#include "Parkour/CParkourComponent.h"
 #include "CPlayer.generated.h"
 
+/**
+ * @brief Player Character
+ */
 UCLASS()
 class U2211_06_API ACPlayer 
 	: public ACharacter
@@ -33,6 +37,15 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		class UCStateComponent* State;
 
+	UPROPERTY(VisibleDefaultsOnly)
+	class UCParkourComponent* Parkour;
+
+private:
+	UPROPERTY(VisibleDefaultsOnly)
+	class USceneComponent* ArrowGroup;
+
+	UPROPERTY(VisibleDefaultsOnly)
+	class UArrowComponent* Arrows[(int32)EParkourArrowType::Max];
 
 public:
 	ACPlayer();
