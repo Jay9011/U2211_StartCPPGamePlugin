@@ -2,31 +2,22 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Engine/DataTable.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Engine/DataTable.h"
 #include "CParkourComponent.generated.h"
 
-/**
- * @brief Parkour Arrow Type
- */
 UENUM(BlueprintType)
 enum class EParkourArrowType : uint8
 {
 	Center = 0, Ceil, Floor, Left, Right, Land, Max,
- };
+};
 
-/**
- * @brief Parkour Type
- */
 UENUM(BlueprintType)
 enum class EParkourType : uint8
 {
 	Climb = 0, Fall, Slide, Short, Normal, Wall, Max,
- };
+};
 
-/**
- * @brief Parkour Data
- */
 USTRUCT(BlueprintType)
 struct FParkourData : public FTableRowBase
 {
@@ -34,35 +25,32 @@ struct FParkourData : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere)
-	EParkourType Type;
+		EParkourType Type;
 
 	UPROPERTY(EditAnywhere)
-	UAnimMontage* Montage;
+		UAnimMontage* Montage;
 
 	UPROPERTY(EditAnywhere)
-	float PlayRatio = 1;
+		float PlayRatio = 1;
 
 	UPROPERTY(EditAnywhere)
-	FName SectionName;
+		FName SectionName;
 
 	UPROPERTY(EditAnywhere)
-	float MinDistance;
+		float MinDistance;
 
 	UPROPERTY(EditAnywhere)
-	float MaxDistance;
+		float MaxDistance;
 
 	UPROPERTY(EditAnywhere)
-	float Extent;
+		float Extent;
 
 	UPROPERTY(EditAnywhere)
-	bool bFixedCamera;
+		bool bFixedCamera;
 public:
 	void PlayMontage(class ACharacter* InCharacter);
 };
 
-/**
- * @brief Parkour Component
- */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class U2211_06_API UCParkourComponent : public UActorComponent
 {
@@ -70,18 +58,18 @@ class U2211_06_API UCParkourComponent : public UActorComponent
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Data")
-	UDataTable* DataTable;
+		UDataTable* DataTable;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Trace")
-	float TraceDistance = 600;
+		float TraceDistance = 600;
 
 	UPROPERTY(EditAnywhere, Category = "Trace")
-	TEnumAsByte<EDrawDebugTrace::Type> DebugType;
+		TEnumAsByte<EDrawDebugTrace::Type> DebugType;
 
 	UPROPERTY(EditAnywhere, Category = "Trace")
-	float AvailableFrontAngle = 15;
-	
+		float AvailableFrontAngle = 15;
+
 public:	
 	UCParkourComponent();
 
@@ -89,26 +77,61 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;	
 
 private:
 	void LineTrace(EParkourArrowType InType);
+
+private:
 	void CheckTrace_Center();
+	void CheckTrace_Ceil();
+	void CheckTrace_Floor();
+	void CheckTrace_LeftRight();
+	void CheckTrace_Land();
+
+private:
+	bool Check_Obstacle();
+
+public:
+	void DoParkour(bool bLanded = false);
+	void End_DoParkour();
+
+private:
+	bool Check_ClimbMode();
+	void DoParkour_Climb();
+	void End_DoParkour_Climb();
+
+private:
+	bool Check_FallMode();
+	void DoParkour_Fall();
+
+private:
+	bool Check_SlideMode();
+	void DoParkour_Slide();
+	void End_DoParkour_Slide();
 
 private:
 	TMap<EParkourType, TArray<FParkourData>> DataMap;
 
 private:
-   class ACharacter* OwnerCharacter;
-   class UArrowComponent* Arrows[(int32)EParkourArrowType::Max];
+	class ACharacter* OwnerCharacter;
+	class UArrowComponent* Arrows[(int32)EParkourArrowType::Max];
 
 private:
 	FHitResult HitResults[(int32)EParkourArrowType::Max];
 
 private:
-	//Center Trace Result
 	AActor* HitObstacle;
 	FVector HitObstacleExtent;
 	float HitDistance;
 	float ToFrontYaw;
+
+private:
+	EParkourType Type = EParkourType::Max;
+
+private:
+	bool bFalling;
+
+private:
+	AActor* BackupObstacle;
 };

@@ -7,9 +7,6 @@
 #include "Parkour/CParkourComponent.h"
 #include "CPlayer.generated.h"
 
-/**
- * @brief Player Character
- */
 UCLASS()
 class U2211_06_API ACPlayer 
 	: public ACharacter
@@ -38,14 +35,15 @@ private:
 		class UCStateComponent* State;
 
 	UPROPERTY(VisibleDefaultsOnly)
-	class UCParkourComponent* Parkour;
+		class UCParkourComponent* Parkour;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly)
-	class USceneComponent* ArrowGroup;
+		class USceneComponent* ArrowGroup;
 
 	UPROPERTY(VisibleDefaultsOnly)
-	class UArrowComponent* Arrows[(int32)EParkourArrowType::Max];
+		class UArrowComponent* Arrows[(int32)EParkourArrowType::Max];
+
 
 public:
 	ACPlayer();
@@ -68,4 +66,10 @@ private:
 
 public:
 	void End_BackStep() override;
+
+private:
+	void Click_RightButton();
+
+public:
+	void Landed(const FHitResult& Hit) override;
 };

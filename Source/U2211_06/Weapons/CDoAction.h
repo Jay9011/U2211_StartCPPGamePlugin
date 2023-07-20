@@ -29,6 +29,13 @@ public:
 	virtual void End_DoAction();
 
 public:
+public:
+	UFUNCTION()
+		virtual void OnBeginEquip() { }
+
+	UFUNCTION()
+		virtual void OnUnequip() { }
+
 	UFUNCTION()
 		virtual void OnAttachmentBeginCollision() { }
 
@@ -41,13 +48,6 @@ public:
 	UFUNCTION()
 		virtual void OnAttachmentEndOverlap(class ACharacter* InAttacker, class ACharacter* InOther) { }
 
-public:
-	UFUNCTION()
-	virtual void OnBeginEquip() { }
-
-	UFUNCTION()
-	virtual void OnUnequip() { }
-	
 protected:
 	bool bInAction;
 	bool bBeginAction;

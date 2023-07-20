@@ -4,13 +4,12 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
-#include "Components/ArrowComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/CWeaponComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CMovementComponent.h"
-#include "Parkour/CParkourComponent.h"
+#include "Components/ArrowComponent.h"
 
 ACPlayer::ACPlayer()
 {
@@ -21,9 +20,8 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
 	CHelpers::CreateActorComponent<UCMovementComponent>(this, &Movement, "Movement");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
-
 	CHelpers::CreateActorComponent<UCParkourComponent>(this, &Parkour, "Parkour");
-	
+
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
@@ -46,46 +44,46 @@ ACPlayer::ACPlayer()
 
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 
+
 	CHelpers::CreateComponent<USceneComponent>(this, &ArrowGroup, "ArrowGroup", GetCapsuleComponent());
-	for(int32 i = 0; i < (int32)EParkourArrowType::Max; ++i)
+	for (int32 i = 0; i < (int32)EParkourArrowType::Max; i++)
 	{
 		FString name = StaticEnum<EParkourArrowType>()->GetNameStringByIndex(i);
 		CHelpers::CreateComponent<UArrowComponent>(this, &Arrows[i], FName(name), ArrowGroup);
 
 		switch ((EParkourArrowType)i)
 		{
-		case EParkourArrowType::Center:
-			Arrows[i]->ArrowColor = FColor::Red;
-			break;
+			case EParkourArrowType::Center:
+				Arrows[i]->ArrowColor = FColor::Red;
+				break;
 
-		case EParkourArrowType::Ceil:
-			Arrows[i]->ArrowColor = FColor::Green;
-			Arrows[i]->SetRelativeLocation(FVector(0, 0, 100));
-			break;
+			case EParkourArrowType::Ceil:
+				Arrows[i]->ArrowColor = FColor::Green;
+				Arrows[i]->SetRelativeLocation(FVector(0, 0, 100));
+				break;
 
-		case EParkourArrowType::Floor:
-			Arrows[i]->ArrowColor = FColor::Blue;
-			Arrows[i]->SetRelativeLocation(FVector(0, 0, -80));
-			break;
+			case EParkourArrowType::Floor:
+				Arrows[i]->ArrowColor = FColor::Blue;
+				Arrows[i]->SetRelativeLocation(FVector(0, 0, -80));
+				break;
 
-		case EParkourArrowType::Left:
-			Arrows[i]->ArrowColor = FColor::Magenta;
-			Arrows[i]->SetRelativeLocation(FVector(0, -30, 0));
-			break;
+			case EParkourArrowType::Left:
+				Arrows[i]->ArrowColor = FColor::Magenta;
+				Arrows[i]->SetRelativeLocation(FVector(0, -30, 0));
+				break;
 
-		case EParkourArrowType::Right:
-			Arrows[i]->ArrowColor = FColor::Magenta;
-			Arrows[i]->SetRelativeLocation(FVector(0, 30, 0));
-			break;
+			case EParkourArrowType::Right:
+				Arrows[i]->ArrowColor = FColor::Magenta;
+				Arrows[i]->SetRelativeLocation(FVector(0, 30, 0));
+				break;
 
-		case EParkourArrowType::Land:
-			Arrows[i]->ArrowColor = FColor::Yellow;
-			Arrows[i]->SetRelativeLocation(FVector(200, 0, 100));
-			Arrows[i]->SetRelativeRotation(FRotator(-90, 0, 0));
-			break;
-		}//switch ((EParkourArrowType)i)
-		
-	}//for(EArrowType::Max)
+			case EParkourArrowType::Land:
+				Arrows[i]->ArrowColor = FColor::Yellow;
+				Arrows[i]->SetRelativeLocation(FVector(200, 0, 100));
+				Arrows[i]->SetRelativeRotation(FRotator(-90, 0, 0));
+				break;
+		}
+	}
 }
 
 void ACPlayer::BeginPlay()
@@ -121,7 +119,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoAction);
 
-	PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SubAction_Pressed);
+	PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Pressed, this, &ACPlayer::Click_RightButton);
+	//PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SubAction_Pressed);
 	PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Released, Weapon, &UCWeaponComponent::SubAction_Released);
 }
 
@@ -155,4 +154,21 @@ void ACPlayer::End_BackStep()
 	Movement->DisableControlRotation();
 
 	State->SetIdleMode();
+}
+
+void ACPlayer::Click_RightButton()
+{
+	if (Weapon->IsUnarmedMode())
+	{
+		Parkour->DoParkour();
+
+		return;
+	}
+
+	Weapon->SubAction_Pressed();
+}
+
+void ACPlayer::Landed(const FHitResult& Hit)
+{
+	Parkour->DoParkour(true);
 }
