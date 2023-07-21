@@ -111,6 +111,11 @@ private:
 	void End_DoParkour_Slide();
 
 private:
+	bool Check_ObstacleMode(EParkourType InType, FParkourData& OutData);
+	void DoParkour_Obstacle(FParkourData& InData);
+	void End_DoParkour_Obstacle();
+
+private:
 	TMap<EParkourType, TArray<FParkourData>> DataMap;
 
 private:

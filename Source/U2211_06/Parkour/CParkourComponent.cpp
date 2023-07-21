@@ -209,6 +209,28 @@ void UCParkourComponent::DoParkour(bool bLanded)
 
 		return;
 	}
+
+	FParkourData data;
+	if (Check_ObstacleMode(EParkourType::Normal, data))
+	{
+		DoParkour_Obstacle(data);
+
+		return;
+	}
+
+	if (Check_ObstacleMode(EParkourType::Short, data))
+	{
+		DoParkour_Obstacle(data);
+
+		return;
+	}
+
+	if (Check_ObstacleMode(EParkourType::Wall, data))
+	{
+		DoParkour_Obstacle(data);
+
+		return;
+	}
 }
 
 void UCParkourComponent::End_DoParkour()
@@ -355,6 +377,43 @@ void UCParkourComponent::DoParkour_Slide()
 }
 
 void UCParkourComponent::End_DoParkour_Slide()
+{
+	BackupObstacle->SetActorEnableCollision(true);
+	BackupObstacle = NULL;
+}
+
+bool UCParkourComponent::Check_ObstacleMode(EParkourType InType, FParkourData & OutData)
+{
+	CheckTrueResult(HitResults[(int32)EParkourArrowType::Ceil].bBlockingHit, false);
+
+	const TArray<FParkourData>* datas = DataMap.Find(InType);
+
+	for (int32 i = 0; i < (*datas).Num(); i++)
+	{
+		bool b = true;
+		b &= (*datas)[i].MinDistance < HitDistance;
+		b &= (*datas)[i].MaxDistance > HitDistance;
+		b &= FMath::IsNearlyEqual((*datas)[i].Extent, HitObstacleExtent.Y, 10);
+
+		OutData = (*datas)[i];
+		CheckTrueResult(b, true);
+	}
+
+	return false;
+}
+
+void UCParkourComponent::DoParkour_Obstacle(FParkourData & InData)
+{
+	Type = InData.Type;
+
+	OwnerCharacter->SetActorRotation(FRotator(0, ToFrontYaw, 0));
+	InData.PlayMontage(OwnerCharacter);
+
+	BackupObstacle = HitObstacle;
+	BackupObstacle->SetActorEnableCollision(false);
+}
+
+void UCParkourComponent::End_DoParkour_Obstacle()
 {
 	BackupObstacle->SetActorEnableCollision(true);
 	BackupObstacle = NULL;

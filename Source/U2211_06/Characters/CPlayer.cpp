@@ -10,6 +10,7 @@
 #include "Components/CMontagesComponent.h"
 #include "Components/CMovementComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Components/CZoomComponent.h"
 
 ACPlayer::ACPlayer()
 {
@@ -21,6 +22,7 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateActorComponent<UCMovementComponent>(this, &Movement, "Movement");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 	CHelpers::CreateActorComponent<UCParkourComponent>(this, &Parkour, "Parkour");
+	CHelpers::CreateActorComponent<UCZoomComponent>(this, &Zoom, "Zoom");
 
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
@@ -110,6 +112,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoid);
 
+	//PlayerInputComponent->BindAxis("Zoom", Zoom, &UCZoomComponent::SetZoomValue);
+	PlayerInputComponent->BindAxis("Zoom", this, &ACPlayer::SetZooming);
+	
 	PlayerInputComponent->BindAction("Fist", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SetFistMode);
 	PlayerInputComponent->BindAction("Sword", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SetSwordMode);
 	PlayerInputComponent->BindAction("Hammer", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SetHammerMode);
@@ -171,4 +176,11 @@ void ACPlayer::Click_RightButton()
 void ACPlayer::Landed(const FHitResult& Hit)
 {
 	Parkour->DoParkour(true);
+}
+
+void ACPlayer::SetZooming(float InValue)
+{
+	CheckTrue(Weapon->IsBowMode());
+
+	Zoom->SetZoomValue(InValue);
 }
