@@ -5,7 +5,7 @@
 #include "Components/ArrowComponent.h"
 #include "Components/CMovementComponent.h"
 
-#define LOG_UCParkourComponent
+// #define LOG_UCParkourComponent
 
 void FParkourData::PlayMontage(class ACharacter* InCharacter)
 {

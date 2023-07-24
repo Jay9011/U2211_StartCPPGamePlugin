@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Components/CFeetComponent.h"
 #include "Components/CWeaponComponent.h"
 #include "CAnimInstance.generated.h"
 
@@ -20,6 +21,17 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Animation")
 		float Direction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+	bool bFalling;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "InverseKinemetics")
+	bool bFeet;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "InverseKinemetics")
+	FFeetData FeetData;
+
+protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Bow")
 		bool bBow_Aiming;
 

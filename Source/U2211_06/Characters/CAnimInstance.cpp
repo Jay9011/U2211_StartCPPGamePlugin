@@ -1,6 +1,8 @@
 #include "Characters/CAnimInstance.h"
 #include "Global.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Parkour/CParkourComponent.h"
 #include "Weapons/CSubAction.h"
 
 void UCAnimInstance::NativeBeginPlay()
@@ -29,10 +31,29 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Direction = PrevRotation.Yaw;
 
 	Pitch = UKismetMathLibrary::FInterpTo(Pitch, OwnerCharacter->GetBaseAimRotation().Pitch, DeltaSeconds, 25);
+	bFalling = OwnerCharacter->GetCharacterMovement()->IsFalling();
 
+	
+	UCParkourComponent* parkour = CHelpers::GetComponent<UCParkourComponent>(OwnerCharacter);
+	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(OwnerCharacter);
 
-	CheckNull(Weapon);
+	bFeet = false;
 
+	CheckNull(Weapon)
+	CheckFalse(Weapon->IsUnarmedMode())
+
+	if (!!parkour && !!feet)
+	{
+		bFeet = parkour->IsExecuting() == false;
+		FeetData = feet->GetData();
+	}
+	else if (!!feet)
+	{
+		bFeet = true;
+		FeetData = feet->GetData();
+	}
+
+	
 	if (!!Weapon->GetSubAction())
 	{
 		bBow_Aiming = true;

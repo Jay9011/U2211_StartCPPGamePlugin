@@ -70,6 +70,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Trace")
 		float AvailableFrontAngle = 15;
 
+public:
+	FORCEINLINE bool IsExecuting() { return Type != EParkourType::Max; }
+	
 public:	
 	UCParkourComponent();
 
