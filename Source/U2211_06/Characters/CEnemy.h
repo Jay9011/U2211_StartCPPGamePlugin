@@ -17,10 +17,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Color")
 		FLinearColor OriginColor = FLinearColor::White;
 
-private:
-	UPROPERTY(VisibleDefaultsOnly)
-		class UCWeaponComponent* Weapon;
-
+protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCMovementComponent* Movement;
 

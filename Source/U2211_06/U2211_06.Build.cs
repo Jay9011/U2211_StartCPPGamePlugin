@@ -16,5 +16,7 @@ public class U2211_06 : ModuleRules
         PrivateDependencyModuleNames.Add("InputCore");
 
         PublicDependencyModuleNames.Add("Niagara");
+        
+        PublicDependencyModuleNames.Add("AIModule");
     }
 }
