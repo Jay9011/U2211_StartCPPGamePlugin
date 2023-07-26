@@ -184,3 +184,9 @@ void ACPlayer::SetZooming(float InValue)
 
 	Zoom->SetZoomValue(InValue);
 }
+
+void ACPlayer::SetGenericTeamId(const FGenericTeamId& NewTeamID)
+{
+	if(TeamID != NewTeamID)
+		TeamID = NewTeamID;
+}

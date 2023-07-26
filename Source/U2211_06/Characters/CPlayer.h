@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GenericTeamAgentInterface.h"
 #include "ICharacter.h"
 #include "GameFramework/Character.h"
 #include "Components/CStateComponent.h"
@@ -11,9 +12,14 @@ UCLASS()
 class U2211_06_API ACPlayer 
 	: public ACharacter
 	, public IICharacter
+	, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Team")
+	FGenericTeamId TeamID = FGenericTeamId(1);
+	
 private:
 	UPROPERTY(VisibleAnywhere)
 		class USpringArmComponent* SpringArm;
@@ -78,4 +84,8 @@ public:
 
 private:
 	void SetZooming(float InValue);
+
+public:
+	void SetGenericTeamId(const FGenericTeamId& NewTeamID) override;
+	FGenericTeamId GetGenericTeamId() const override { return TeamID; }
 };
