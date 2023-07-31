@@ -18,6 +18,12 @@ EAIStateType UCAIBehaviorComponent::GetType()
 {
 	return static_cast<EAIStateType>(Blackboard->GetValueAsEnum(AIStateTypeKey));
 }
+
+ACharacter* UCAIBehaviorComponent::GetTarget()
+{
+	return Cast<ACharacter>(Blackboard->GetValueAsObject(TargetKey));
+}
+
 bool UCAIBehaviorComponent::IsWaitMode()
 {
 	return GetType() == EAIStateType::Wait;
@@ -86,6 +92,16 @@ void UCAIBehaviorComponent::SetAvoidMode()
 void UCAIBehaviorComponent::SetDeadMode()
 {
 	ChangeType(EAIStateType::Dead);
+}
+
+FVector UCAIBehaviorComponent::GetPatrolLocation()
+{
+	return Blackboard->GetValueAsVector(PatrolLocationKey);
+}
+
+void UCAIBehaviorComponent::SetPatrolLocation(const FVector& InLocation)
+{
+	Blackboard->SetValueAsVector(PatrolLocationKey, InLocation);
 }
 
 void UCAIBehaviorComponent::ChangeType(EAIStateType InType)

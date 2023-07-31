@@ -26,6 +26,9 @@ protected:
 
 private:
 	EAIStateType GetType();
+
+public:
+	class ACharacter* GetTarget();
 	
 public:
 	bool IsWaitMode();
@@ -45,6 +48,10 @@ public:
 	void SetAvoidMode();
 	void SetDeadMode();
 
+public:
+	FVector GetPatrolLocation();
+	void SetPatrolLocation(const FVector& InLocation);
+
 	
 private:
 	UPROPERTY(EditAnywhere, Category = "Key")
@@ -52,6 +59,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Key")
 	FName TargetKey = "Target";
+	
+	UPROPERTY(EditAnywhere, Category = "Key")
+	FName PatrolLocationKey = "PatrolLocation";
 
 private:
 	void ChangeType(EAIStateType InType);
