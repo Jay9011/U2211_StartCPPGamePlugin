@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "BehaviorTree/CBTTaskNode_Equip.h"
 #include "CWeaponComponent.generated.h"
 
 UENUM(BlueprintType)
@@ -28,6 +29,9 @@ public:
 	FORCEINLINE bool IsWarpMode() { return Type == EWeaponType::Warp; }
 	FORCEINLINE bool IsAroundMode() { return Type == EWeaponType::Around; }
 	FORCEINLINE bool IsBowMode() { return Type == EWeaponType::Bow; }
+
+public:
+	FORCEINLINE EWeaponType GetWeaponType() { return Type; }
 
 public:	
 	UCWeaponComponent();

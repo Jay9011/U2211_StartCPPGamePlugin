@@ -28,4 +28,8 @@ private:
 protected:
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+
+private:
+	void DrawDebug(UWorld* InWorld, FVector InLocation);
+	
 };

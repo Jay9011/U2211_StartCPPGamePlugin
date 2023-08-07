@@ -28,6 +28,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	uint8 TeamID = 2;
 
+private:
+	UPROPERTY(EditAnywhere, Category = "Patrol")
+	class ACPatrolPath* PatrolPath;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -43,7 +46,7 @@ private:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Label")
 	float LabelViewAmount = 3000.0f;
-	
+
 	UPROPERTY(VisibleDefaultsOnly)
 	class UWidgetComponent* LabelWidget;
 #endif
@@ -51,4 +54,5 @@ private:
 public:
 	FORCEINLINE uint8 GetTeamID() { return TeamID; }
 	FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
+	FORCEINLINE class ACPatrolPath* GetPatrolPath() { return PatrolPath; }
 };

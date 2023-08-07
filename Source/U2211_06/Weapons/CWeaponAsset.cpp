@@ -12,7 +12,7 @@ UCWeaponAsset::UCWeaponAsset()
 	EquipmentClass = UCEquipment::StaticClass();
 	//DoActionClass = UCDoAction::StaticClass();
 }
-
+ 
 void UCWeaponAsset::BeginPlay(ACharacter * InOwner)
 {
 	if (!!AttachmentClass)

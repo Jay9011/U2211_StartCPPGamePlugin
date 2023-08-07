@@ -22,6 +22,17 @@ EBTNodeResult::Type UCBTTaskNode_Patrol::ExecuteTask(UBehaviorTreeComponent& Own
 	ACEnemy_AI* ai = Cast<ACEnemy_AI>(controller->GetPawn());
 	UCAIBehaviorComponent* behavior = CHelpers::GetComponent<UCAIBehaviorComponent>(ai);
 
+	if (!!ai->GetPatrolPath())
+	{
+		FVector moveToPoint = ai->GetPatrolPath()->GetMoveTo();
+		behavior->SetPatrolLocation(moveToPoint);
+
+		DrawDebug(ai->GetWorld(), moveToPoint);
+
+		return EBTNodeResult::InProgress;
+	}
+
+	
 	FVector location = ai->GetActorLocation();
 
 	UNavigationSystemV1* navSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(ai->GetWorld());
@@ -35,9 +46,7 @@ EBTNodeResult::Type UCBTTaskNode_Patrol::ExecuteTask(UBehaviorTreeComponent& Own
 	}
 
 	behavior->SetPatrolLocation(point.Location);
-
-	if (bDebugMode)
-		DrawDebugSphere(ai->GetWorld(), point.Location, 10, 10, FColor::Green, true, 5);
+	DrawDebug(ai->GetWorld(), point.Location);
 
 	return EBTNodeResult::InProgress;
 }
@@ -61,9 +70,18 @@ void UCBTTaskNode_Patrol::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		break;
 	case EPathFollowingRequestResult::AlreadyAtGoal:
 		{
+			if(ai->GetPatrolPath())
+				ai->GetPatrolPath()->UpdateIndex();
+			
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		}
 		break;
 	default: ;
 	}
+}
+
+void UCBTTaskNode_Patrol::DrawDebug(UWorld* InWorld, FVector InLocation)
+{
+	if (bDebugMode)
+		DrawDebugSphere(InWorld, InLocation, 10, 10, FColor::Green, true, 5);
 }
