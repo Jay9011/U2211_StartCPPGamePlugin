@@ -3,6 +3,7 @@
 #include "CStateComponent.h"
 #include "GameFramework/Character.h"
 #include "Weapons/CWeaponAsset.h"
+#include "Weapons/CWeaponData.h"
 #include "Weapons/CAttachment.h"
 #include "Weapons/CEquipment.h"
 #include "Weapons/CDoAction.h"
@@ -22,7 +23,7 @@ void UCWeaponComponent::BeginPlay()
 	for (int32 i = 0; i < (int32)EWeaponType::Max; i++)
 	{
 		if (!!DataAssets[i])
-			DataAssets[i]->BeginPlay(OwnerCharacter);
+			DataAssets[i]->BeginPlay(OwnerCharacter, &Datas[i]);
 	}
 }
 
@@ -45,33 +46,33 @@ bool UCWeaponComponent::IsIdleMode()
 ACAttachment * UCWeaponComponent::GetAttachment()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckFalseResult(!!DataAssets[(int32)Type], nullptr);
+	CheckFalseResult(!!Datas[(int32)Type], nullptr);
 
-	return DataAssets[(int32)Type]->GetAttachment();
+	return Datas[(int32)Type]->GetAttachment();
 }
 
 UCEquipment * UCWeaponComponent::GetEquipment()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckFalseResult(!!DataAssets[(int32)Type], nullptr);
+	CheckFalseResult(!!Datas[(int32)Type], nullptr);
 
-	return DataAssets[(int32)Type]->GetEquipment();
+	return Datas[(int32)Type]->GetEquipment();
 }
 
 UCDoAction * UCWeaponComponent::GetDoAction()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckFalseResult(!!DataAssets[(int32)Type], nullptr);
+	CheckFalseResult(!!Datas[(int32)Type], nullptr);
 
-	return DataAssets[(int32)Type]->GetDoAction();
+	return Datas[(int32)Type]->GetDoAction();
 }
 
 UCSubAction * UCWeaponComponent::GetSubAction()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckFalseResult(!!DataAssets[(int32)Type], nullptr);
+	CheckFalseResult(!!Datas[(int32)Type], nullptr);
 
-	return DataAssets[(int32)Type]->GetSubAction();
+	return Datas[(int32)Type]->GetSubAction();
 }
 
 void UCWeaponComponent::SetUnarmedMode()
@@ -144,9 +145,9 @@ void UCWeaponComponent::SetMode(EWeaponType InType)
 		GetEquipment()->Unequip();
 	}
 
-	if (!!DataAssets[(int32)InType])
+	if (!!Datas[(int32)InType])
 	{
-		DataAssets[(int32)InType]->GetEquipment()->Equip();
+		Datas[(int32)InType]->GetEquipment()->Equip();
 
 		ChangeType(InType);
 	}

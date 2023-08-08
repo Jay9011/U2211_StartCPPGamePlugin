@@ -60,4 +60,7 @@ protected:
 
 	TArray<FDoActionData> DoActionDatas;
 	TArray<FHitData> HitDatas;
+
+public:
+	FORCEINLINE bool GetInAction() { return bInAction; }
 };

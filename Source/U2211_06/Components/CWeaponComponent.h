@@ -19,7 +19,7 @@ class U2211_06_API UCWeaponComponent : public UActorComponent
 
 private:
 	UPROPERTY(EditAnywhere, Category = "DataAsset")
-		class UCWeaponAsset* DataAssets[(int32)EWeaponType::Max];
+	class UCWeaponAsset* DataAssets[(int32)EWeaponType::Max];
 
 public:
 	FORCEINLINE bool IsUnarmedMode() { return Type == EWeaponType::Max; }
@@ -76,4 +76,8 @@ private:
 	class ACharacter* OwnerCharacter;
 
 	EWeaponType Type = EWeaponType::Max;
+
+private:
+	UPROPERTY()
+	class UCWeaponData* Datas[(int32)EWeaponType::Max];
 };

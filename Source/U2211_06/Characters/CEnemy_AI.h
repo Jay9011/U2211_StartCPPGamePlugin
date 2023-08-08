@@ -21,6 +21,12 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	virtual void Hitted() override;
+	
+public:
+	virtual void End_Hitted() override;
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
