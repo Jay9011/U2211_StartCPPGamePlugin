@@ -77,7 +77,8 @@ public:
 	void End_BackStep() override;
 
 private:
-	void Click_RightButton();
+	void OnRightButton();
+	void OffRightButton();
 
 public:
 	void Landed(const FHitResult& Hit) override;

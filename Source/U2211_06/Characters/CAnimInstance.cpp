@@ -37,11 +37,20 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	UCParkourComponent* parkour = CHelpers::GetComponent<UCParkourComponent>(OwnerCharacter);
 	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(OwnerCharacter);
 
-	bFeet = false;
-
 	CheckNull(Weapon)
+	
+	if (!!Weapon->GetSubAction())
+	{
+		bBow_Aiming = true;
+		bBow_Aiming &= (WeaponType == EWeaponType::Bow);
+		bBow_Aiming &= (Weapon->GetSubAction()->GetInAction());
+	}
+
+	
 	CheckFalse(Weapon->IsUnarmedMode())
 
+	bFeet = false;
+	
 	if (!!parkour && !!feet)
 	{
 		bFeet = parkour->IsExecuting() == false;
@@ -54,12 +63,6 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 
 	
-	if (!!Weapon->GetSubAction())
-	{
-		bBow_Aiming = true;
-		bBow_Aiming &= (WeaponType == EWeaponType::Bow);
-		bBow_Aiming &= (Weapon->GetSubAction()->GetInAction());
-	}
 }
 
 void UCAnimInstance::OnWeaponTypeChanged(EWeaponType InPrevType, EWeaponType InNewType)

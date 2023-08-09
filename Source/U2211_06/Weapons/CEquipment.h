@@ -15,8 +15,9 @@ class U2211_06_API UCEquipment : public UObject
 	GENERATED_BODY()
 
 public:
+	FORCEINLINE bool GetBeginEquip() { return bBeginEquip; }
 	FORCEINLINE const bool* GetEquipped() { return &bEquipped; }
-	
+
 public:
 	void BeginPlay(class ACharacter* InOwner, const FEquipmentData& InData);
 

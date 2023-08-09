@@ -63,4 +63,5 @@ protected:
 
 public:
 	FORCEINLINE bool GetInAction() { return bInAction; }
+	FORCEINLINE bool GetBeginAction() { return bBeginAction; }
 };

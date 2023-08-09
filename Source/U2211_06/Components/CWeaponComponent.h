@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "BehaviorTree/CBTTaskNode_Equip.h"
 #include "CWeaponComponent.generated.h"
 
 UENUM(BlueprintType)

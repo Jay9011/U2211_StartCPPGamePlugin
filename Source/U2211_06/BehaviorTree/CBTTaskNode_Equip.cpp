@@ -59,3 +59,24 @@ void UCBTTaskNode_Equip::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		return;
 	}
 }
+
+EBTNodeResult::Type UCBTTaskNode_Equip::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+{
+	Super::AbortTask(OwnerComp, NodeMemory);
+
+	ACAIController* controller = Cast<ACAIController>(OwnerComp.GetOwner());
+	ACEnemy_AI* ai = Cast<ACEnemy_AI>(controller->GetPawn());
+
+	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(ai);
+
+	if(weapon == nullptr)
+		return EBTNodeResult::Failed;
+
+	bool bBeginEquip = weapon->GetEquipment()->GetBeginEquip();
+	if(bBeginEquip == false)
+		weapon->GetEquipment()->Begin_Equip();
+
+	weapon->GetEquipment()->End_Equip();
+	
+	return EBTNodeResult::Aborted;
+}
