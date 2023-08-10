@@ -28,13 +28,12 @@ EBTNodeResult::Type UCBTTaskNode_Equip::ExecuteTask(UBehaviorTreeComponent& Owne
 
 	switch (Type)
 	{
-	case EWeaponType::Fist: break;
+	case EWeaponType::Fist: weapon->SetFistMode(); break;
 	case EWeaponType::Sword: weapon->SetSwordMode(); break;
-	case EWeaponType::Hammer: break;
-	case EWeaponType::Warp: break;
-	case EWeaponType::Around: break;
-	case EWeaponType::Bow: break;
-	case EWeaponType::Max: break;
+	case EWeaponType::Hammer: weapon->SetHammerMode(); break;
+	case EWeaponType::Warp: weapon->SetWarpMode(); break;
+	case EWeaponType::Around: weapon->SetAroundMode(); break;
+	case EWeaponType::Bow: weapon->SetBowMode(); break;
 	default: ;
 	}
 

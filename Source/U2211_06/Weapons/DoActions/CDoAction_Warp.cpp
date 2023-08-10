@@ -1,5 +1,6 @@
 #include "Weapons/DoActions/CDoAction_Warp.h"
 #include "Global.h"
+#include "Components/CAIBehaviorComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/CStateComponent.h"
@@ -18,6 +19,8 @@ void UCDoAction_Warp::BeginPlay(ACAttachment * InAttachment, UCEquipment * InEqu
 
 	Decal = CHelpers::GetComponent<UDecalComponent>(InAttachment);
 	PlayerController = OwnerCharacter->GetController<APlayerController>();
+	
+	Behavior = CHelpers::GetComponent<UCAIBehaviorComponent>(InOwner);
 }
 
 void UCDoAction_Warp::Tick(float InDeltaTime)
@@ -36,6 +39,8 @@ void UCDoAction_Warp::Tick(float InDeltaTime)
 
 		return;
 	}
+
+	CheckTrue(bInAction)
 
 
 	Decal->SetVisibility(true);
@@ -60,8 +65,6 @@ void UCDoAction_Warp::DoAction()
 		float yaw = UKismetMathLibrary::FindLookAtRotation(OwnerCharacter->GetActorLocation(), MoveToLocation).Yaw;
 		OwnerCharacter->SetActorRotation(FRotator(0, yaw, 0));
 	}
-	else
-		return;
 
 	DoActionDatas[0].DoAction(OwnerCharacter);
 }
@@ -70,8 +73,16 @@ void UCDoAction_Warp::Begin_DoAction()
 {
 	Super::Begin_DoAction();
 
-	OwnerCharacter->SetActorLocation(MoveToLocation);
-	MoveToLocation = FVector::ZeroVector;
+	if(!!PlayerController)
+	{
+		OwnerCharacter->SetActorLocation(MoveToLocation);
+		MoveToLocation = FVector::ZeroVector;
+
+		return;
+	}
+	
+	CheckNull(Behavior)
+	OwnerCharacter->SetActorLocation(Behavior->GetAvoidLocation());
 }
 
 bool UCDoAction_Warp::GetCursorLocationAndRotation(FVector& OutLocation, FRotator& OutRotation)

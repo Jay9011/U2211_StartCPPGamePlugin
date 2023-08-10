@@ -61,7 +61,10 @@ public:
 
 	void DoAction();
 
+public:
+	UFUNCTION(BlueprintCallable)
 	void SubAction_Pressed();
+	UFUNCTION(BlueprintCallable)
 	void SubAction_Released();
 
 private:
