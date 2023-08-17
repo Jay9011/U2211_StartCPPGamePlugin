@@ -20,5 +20,7 @@ public class U2211_06 : ModuleRules
         PublicDependencyModuleNames.Add("AIModule");
         PublicDependencyModuleNames.Add("GameplayTasks");
         PublicDependencyModuleNames.Add("NavigationSystem");
+        
+        PublicDependencyModuleNames.Add("ProceduralMeshComponent");
     }
 }
